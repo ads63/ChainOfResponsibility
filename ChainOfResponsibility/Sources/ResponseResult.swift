@@ -10,9 +10,10 @@ import Foundation
 class ResponseResult: ResponseProtocol {
     var list: [Person]?
 
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.list = try container.decode([Person].self, forKey: .result)
+    required init(from decoder: Decoder) {
+        guard let container = try? decoder.container(keyedBy: CodingKeys.self)
+        else { return }
+        self.list = try? container.decode([Person].self, forKey: .result)
     }
 
     enum CodingKeys: String, CodingKey {

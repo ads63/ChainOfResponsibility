@@ -8,8 +8,10 @@
 import UIKit
 
 class ViewController: UIViewController {
+    var parser: ParserProtocol?
     override func viewDidLoad() {
         super.viewDidLoad()
+        parser = buildParser()
         var dataArray = [Data]()
         dataArray.append(data(from: "1")) // 1.json
         dataArray.append(data(from: "2")) // 2.json
@@ -35,12 +37,16 @@ class ViewController: UIViewController {
         return data
     }
 
-    private func parseData(data: Data) -> [Person]? {
+    private func buildParser() -> ParserProtocol {
         let parser1 = DataParser<ResponseData>()
         let parser2 = DataParser<ResponseResult>()
         let parser3 = DataParser<Response>()
         parser1.next = parser2
         parser2.next = parser3
-        return parser1.parse(data: data)
+        return parser1
+    }
+
+    private func parseData(data: Data) -> [Person]? {
+        return parser?.parse(data: data)
     }
 }
